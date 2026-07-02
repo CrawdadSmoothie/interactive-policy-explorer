@@ -31,13 +31,36 @@ export function Explorer() {
   const metricId = metricByArea[area.id] ?? area.primaryMetricId;
   const metric = area.metrics.find((m) => m.id === metricId) ?? area.metrics[0];
 
+  const ease = [0.16, 1, 0.3, 1] as const;
+
   const fade = reduce
     ? {}
     : {
         initial: { opacity: 0, y: 8 },
         animate: { opacity: 1, y: 0 },
         exit: { opacity: 0, y: -8 },
-        transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] as const },
+        transition: { duration: 0.4, ease },
+      };
+
+  const headerContainer = reduce
+    ? {}
+    : {
+        initial: "hidden",
+        animate: "visible",
+        exit: "hidden",
+        variants: {
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.09 } },
+        },
+      };
+
+  const headerItem = reduce
+    ? {}
+    : {
+        variants: {
+          hidden: { opacity: 0, y: 10 },
+          visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease } },
+        },
       };
 
   return (
@@ -51,20 +74,29 @@ export function Explorer() {
         {/* Left: narrative + inputs */}
         <div className="flex min-w-0 flex-col gap-8">
           <AnimatePresence mode="wait">
-            <motion.div key={area.id} {...fade}>
-              <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.14em] text-ink-subtle">
+            <motion.div key={area.id} {...headerContainer}>
+              <motion.div
+                className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.14em] text-ink-subtle"
+                {...headerItem}
+              >
                 <span
                   className="inline-block h-1.5 w-1.5 rounded-full"
                   style={{ background: "var(--area-accent)" }}
                 />
                 Selected policy
-              </div>
-              <h2 className="mt-2 font-serif text-[1.75rem] leading-[1.12] tracking-tight text-ink">
+              </motion.div>
+              <motion.h2
+                className="mt-2 font-serif text-[1.75rem] leading-[1.12] tracking-tight text-ink"
+                {...headerItem}
+              >
                 {area.name}
-              </h2>
-              <p className="mt-2.5 max-w-prose text-[15px] leading-relaxed text-ink-muted">
+              </motion.h2>
+              <motion.p
+                className="mt-2.5 max-w-prose text-[15px] leading-relaxed text-ink-muted"
+                {...headerItem}
+              >
                 {area.summary}
-              </p>
+              </motion.p>
             </motion.div>
           </AnimatePresence>
 
