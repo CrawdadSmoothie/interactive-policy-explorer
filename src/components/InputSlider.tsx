@@ -97,12 +97,12 @@ export function InputSlider({ input, value, onChange }: Props) {
       </div>
 
       {input.description && (
-        <p className="mt-0.5 text-xs leading-relaxed text-ink-muted">
+        <p className="mt-0.5 text-[11px] leading-snug text-ink-muted">
           {input.description}
         </p>
       )}
 
-      <div className="group relative mt-3 h-6">
+      <div className="group relative mt-2 h-6">
         {/* Track */}
         <div className="absolute inset-x-0 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-border" />
         {/* Default marker */}
@@ -140,7 +140,7 @@ export function InputSlider({ input, value, onChange }: Props) {
         />
       </div>
 
-      <div className="mt-1.5 flex justify-between text-[11px] text-ink-subtle">
+      <div className="mt-1 flex justify-between text-[10px] text-ink-subtle">
         <span>{formatValue(input.min, input.format)}</span>
         <span>{formatValue(input.max, input.format)}</span>
       </div>

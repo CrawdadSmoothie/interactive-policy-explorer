@@ -11,14 +11,11 @@ export function PolicyNav() {
 
   return (
     <nav aria-label="Policy areas">
-      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-ink-subtle">
-        Choose a policy area
-      </p>
 
       <div
         role="tablist"
         aria-label="Policy areas"
-        className="flex gap-6 overflow-x-auto border-b border-border [scrollbar-width:none] sm:gap-8 [&::-webkit-scrollbar]:hidden"
+        className="flex gap-5 overflow-x-auto border-b border-border [scrollbar-width:none] sm:gap-8 [&::-webkit-scrollbar]:hidden"
       >
         {areas.map((area) => {
           const active = area.id === selectedAreaId;
@@ -30,7 +27,7 @@ export function PolicyNav() {
               aria-selected={active}
               onClick={() => selectArea(area.id)}
               className={cn(
-                "relative shrink-0 whitespace-nowrap pb-3 pt-1 text-[15px] font-medium transition-colors duration-200 outline-none",
+                "relative shrink-0 whitespace-nowrap pb-2.5 text-sm font-medium transition-colors duration-200 outline-none sm:text-[15px]",
                 active ? "text-ink" : "text-ink-subtle hover:text-ink",
               )}
             >

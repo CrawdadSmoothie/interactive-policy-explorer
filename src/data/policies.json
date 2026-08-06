@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "dataQuality": "illustrative",
     "source": "data/source/example-spreadsheet.xlsx",
-    "generatedAt": "2026-06-18T15:35:07.005Z",
+    "generatedAt": "2026-08-06T22:19:22.121Z",
     "disclaimer": "Illustrative sample data for prototype purposes only. Values do not represent verified policy projections."
   },
   "timeAxis": [
@@ -39,9 +39,20 @@
           "default": 100000
         },
         {
+          "id": "annualCost",
+          "label": "Annual Cost",
+          "description": "Federal cost per year, subtracted from the budget gain.",
+          "unit": "per year",
+          "format": "currency_m",
+          "min": 0,
+          "max": 35,
+          "step": 0.5,
+          "default": 8
+        },
+        {
           "id": "effectiveness",
           "label": "Effectiveness",
-          "description": "Estimated reduction in depression among those reached.",
+          "description": "Estimated drop in depression among those reached.",
           "unit": "decrease",
           "format": "percent",
           "min": 0,
@@ -137,14 +148,17 @@
         },
         {
           "id": "federalDeficit",
-          "label": "Change in Federal Deficit",
-          "shortLabel": "Federal deficit",
+          "label": "Federal Budget Impact",
+          "shortLabel": "Budget impact",
           "unit": "",
           "format": "currency_m",
-          "direction": "down-good",
+          "direction": "up-good",
           "drivers": {
             "reach": 1,
             "effectiveness": 1
+          },
+          "offsets": {
+            "annualCost": -1
           }
         }
       ],
@@ -262,12 +276,15 @@
           200
         ]
       },
-      "primaryMetricId": "mhPrevalence",
-      "highlightMetricIds": [
+      "primaryMetricId": "federalDeficit",
+      "basicInputIds": [
+        "reach",
+        "annualCost"
+      ],
+      "basicMetricIds": [
+        "federalDeficit",
         "mhPrevalence",
-        "gdp",
-        "medicaidSpending",
-        "laborSupply"
+        "gdp"
       ]
     },
     {
@@ -288,9 +305,20 @@
           "default": 100000
         },
         {
+          "id": "annualCost",
+          "label": "Annual Cost",
+          "description": "Federal cost per year, subtracted from the budget gain.",
+          "unit": "per year",
+          "format": "currency_m",
+          "min": 0,
+          "max": 30,
+          "step": 0.5,
+          "default": 7
+        },
+        {
           "id": "effectiveness",
           "label": "Effectiveness",
-          "description": "Estimated reduction in depression among those reached.",
+          "description": "Estimated drop in depression among those reached.",
           "unit": "decrease",
           "format": "percent",
           "min": 0,
@@ -386,14 +414,17 @@
         },
         {
           "id": "federalDeficit",
-          "label": "Change in Federal Deficit",
-          "shortLabel": "Federal deficit",
+          "label": "Federal Budget Impact",
+          "shortLabel": "Budget impact",
           "unit": "",
           "format": "currency_m",
-          "direction": "down-good",
+          "direction": "up-good",
           "drivers": {
             "reach": 1,
             "effectiveness": 1
+          },
+          "offsets": {
+            "annualCost": -1
           }
         }
       ],
@@ -511,12 +542,15 @@
           164
         ]
       },
-      "primaryMetricId": "mhPrevalence",
-      "highlightMetricIds": [
+      "primaryMetricId": "federalDeficit",
+      "basicInputIds": [
+        "reach",
+        "annualCost"
+      ],
+      "basicMetricIds": [
+        "federalDeficit",
         "mhPrevalence",
-        "gdp",
-        "medicaidSpending",
-        "laborSupply"
+        "gdp"
       ]
     },
     {
@@ -537,9 +571,20 @@
           "default": 100000
         },
         {
+          "id": "annualCost",
+          "label": "Annual Cost",
+          "description": "Federal cost per year, subtracted from the budget gain.",
+          "unit": "per year",
+          "format": "currency_m",
+          "min": 0,
+          "max": 20,
+          "step": 0.5,
+          "default": 5
+        },
+        {
           "id": "effectiveness",
           "label": "Effectiveness",
-          "description": "Estimated reduction in depression among those reached.",
+          "description": "Estimated drop in depression among those reached.",
           "unit": "decrease",
           "format": "percent",
           "min": 0,
@@ -635,14 +680,17 @@
         },
         {
           "id": "federalDeficit",
-          "label": "Change in Federal Deficit",
-          "shortLabel": "Federal deficit",
+          "label": "Federal Budget Impact",
+          "shortLabel": "Budget impact",
           "unit": "",
           "format": "currency_m",
-          "direction": "down-good",
+          "direction": "up-good",
           "drivers": {
             "reach": 1,
             "effectiveness": 1
+          },
+          "offsets": {
+            "annualCost": -1
           }
         }
       ],
@@ -760,12 +808,15 @@
           136
         ]
       },
-      "primaryMetricId": "mhPrevalence",
-      "highlightMetricIds": [
+      "primaryMetricId": "federalDeficit",
+      "basicInputIds": [
+        "reach",
+        "annualCost"
+      ],
+      "basicMetricIds": [
+        "federalDeficit",
         "mhPrevalence",
-        "gdp",
-        "medicaidSpending",
-        "laborSupply"
+        "gdp"
       ]
     },
     {
@@ -786,9 +837,20 @@
           "default": 100000
         },
         {
+          "id": "annualCost",
+          "label": "Annual Cost",
+          "description": "Federal cost per year, subtracted from the budget gain.",
+          "unit": "per year",
+          "format": "currency_m",
+          "min": 0,
+          "max": 15,
+          "step": 0.5,
+          "default": 4
+        },
+        {
           "id": "effectiveness",
           "label": "Effectiveness",
-          "description": "Estimated reduction in depression among those reached.",
+          "description": "Estimated drop in depression among those reached.",
           "unit": "decrease",
           "format": "percent",
           "min": 0,
@@ -884,14 +946,17 @@
         },
         {
           "id": "federalDeficit",
-          "label": "Change in Federal Deficit",
-          "shortLabel": "Federal deficit",
+          "label": "Federal Budget Impact",
+          "shortLabel": "Budget impact",
           "unit": "",
           "format": "currency_m",
-          "direction": "down-good",
+          "direction": "up-good",
           "drivers": {
             "reach": 1,
             "effectiveness": 1
+          },
+          "offsets": {
+            "annualCost": -1
           }
         }
       ],
@@ -1009,12 +1074,15 @@
           110
         ]
       },
-      "primaryMetricId": "mhPrevalence",
-      "highlightMetricIds": [
+      "primaryMetricId": "federalDeficit",
+      "basicInputIds": [
+        "reach",
+        "annualCost"
+      ],
+      "basicMetricIds": [
+        "federalDeficit",
         "mhPrevalence",
-        "gdp",
-        "medicaidSpending",
-        "laborSupply"
+        "gdp"
       ]
     },
     {
@@ -1035,9 +1103,20 @@
           "default": 100000
         },
         {
+          "id": "annualCost",
+          "label": "Annual Cost",
+          "description": "Federal cost per year, subtracted from the budget gain.",
+          "unit": "per year",
+          "format": "currency_m",
+          "min": 0,
+          "max": 20,
+          "step": 0.5,
+          "default": 4
+        },
+        {
           "id": "effectiveness",
           "label": "Effectiveness",
-          "description": "Estimated reduction in depression among those reached.",
+          "description": "Estimated drop in depression among those reached.",
           "unit": "decrease",
           "format": "percent",
           "min": 0,
@@ -1133,14 +1212,17 @@
         },
         {
           "id": "federalDeficit",
-          "label": "Change in Federal Deficit",
-          "shortLabel": "Federal deficit",
+          "label": "Federal Budget Impact",
+          "shortLabel": "Budget impact",
           "unit": "",
           "format": "currency_m",
-          "direction": "down-good",
+          "direction": "up-good",
           "drivers": {
             "reach": 1,
             "effectiveness": 1
+          },
+          "offsets": {
+            "annualCost": -1
           }
         }
       ],
@@ -1258,12 +1340,15 @@
           120
         ]
       },
-      "primaryMetricId": "mhPrevalence",
-      "highlightMetricIds": [
+      "primaryMetricId": "federalDeficit",
+      "basicInputIds": [
+        "reach",
+        "annualCost"
+      ],
+      "basicMetricIds": [
+        "federalDeficit",
         "mhPrevalence",
-        "gdp",
-        "medicaidSpending",
-        "laborSupply"
+        "gdp"
       ]
     }
   ]

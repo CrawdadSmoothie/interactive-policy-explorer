@@ -4,68 +4,95 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
-  Light, editorial, calm theme (default).
-  Warm paper canvas, near-black warm ink, single confident evergreen accent,
-  plus a restrained data-viz palette. Dark theme mirrors the same intent.
+  The Kennedy Forum brand palette (Visual Guidelines, January 2026).
+
+  Primary:   Off-White #FDFBF5 · Yellow #FFD100 · Dark Green #012A2E
+  Secondary: Light Green #ABC278 · Slate Blue #7394B0 · Light Blue #B0C7E8
+  Tertiary:  Ivory #F5F1E4 · Pale Yellow #FFEBAE · Black #000000
+
+  Light theme is off-white canvas with dark green ink. Dark theme drops the
+  canvas to brand black and promotes dark green to the card surface, so panels
+  read as brand-colored plates floating on a near-black page. Yellow is the
+  accent there; it cannot carry text or hairlines on off-white (~1.7:1), so in
+  light mode it is reserved for highlight fills and dark green does the
+  interactive work.
 */
 :root {
-  --background: #f5f4f0;
+  --background: #fdfbf5;
   --surface: #ffffff;
-  --surface-2: #fbfaf7;
-  --ink: #16150f;
-  --ink-muted: #6b685f;
-  --ink-subtle: #9c988c;
-  --border: #e8e5dd;
-  --border-strong: #d8d4ca;
+  --surface-2: #f5f1e4;
+  --ink: #012a2e;
+  --ink-muted: #4e6669;
+  --ink-subtle: #8a9a9b;
+  --border: #e4e0d2;
+  --border-strong: #cfc9b6;
 
-  --accent: #1c6e5a;
-  --accent-hover: #185f4e;
-  --accent-soft: #e3efea;
-  --accent-contrast: #ffffff;
-  --ring: #1c6e5a;
+  --accent: #012a2e;
+  --accent-hover: #0a4247;
+  --accent-soft: #e2eae9;
+  --accent-contrast: #fdfbf5;
+  --ring: #012a2e;
 
-  /* Data visualization series */
-  --viz-1: #1c6e5a;
-  --viz-2: #bd8b2c;
-  --viz-3: #4b73c2;
-  --viz-4: #b5553b;
-  --viz-5: #6b5ca5;
-  --viz-baseline: #c2bdb1;
-  --viz-grid: #ebe8e0;
+  /* Brand yellow as an emphasis fill rather than a text/line color */
+  --highlight: #ffd100;
+  --highlight-soft: #ffebae;
+  --highlight-contrast: #012a2e;
 
-  /* Soft, premium elevation */
-  --shadow-sm: 0 1px 2px rgba(22, 21, 15, 0.04), 0 1px 3px rgba(22, 21, 15, 0.04);
-  --shadow-md: 0 4px 12px rgba(22, 21, 15, 0.05), 0 2px 6px rgba(22, 21, 15, 0.04);
-  --shadow-lg: 0 18px 48px rgba(22, 21, 15, 0.08), 0 8px 20px rgba(22, 21, 15, 0.05);
+  /* Data visualization series. Only one series shows at a time, so these are
+     compared from memory when switching policy areas — they need separation in
+     hue, not just in value. Brand hues, pushed apart in chroma and lightness
+     and kept dark enough to carry a 2.5px line and small accent text on the
+     off-white canvas. viz-1 deliberately holds chroma rather than reusing the
+     brand dark green, which is the ink color and reads as plain black. */
+  --viz-1: #0a5049;
+  --viz-2: #a8730a;
+  --viz-3: #2f68b0;
+  --viz-4: #5c8a2b;
+  --viz-5: #1f8892;
+  --viz-baseline: #c6c0ae;
+  --viz-grid: #eae5d6;
+
+  /* Soft, premium elevation — tinted with the dark green primary */
+  --shadow-sm: 0 1px 2px rgba(1, 42, 46, 0.05), 0 1px 3px rgba(1, 42, 46, 0.04);
+  --shadow-md: 0 4px 12px rgba(1, 42, 46, 0.06), 0 2px 6px rgba(1, 42, 46, 0.04);
+  --shadow-lg: 0 18px 48px rgba(1, 42, 46, 0.1), 0 8px 20px rgba(1, 42, 46, 0.06);
 }
 
 .dark {
-  --background: #0d0e0c;
-  --surface: #161713;
-  --surface-2: #1c1d18;
-  --ink: #f2f0e8;
-  --ink-muted: #a6a298;
-  --ink-subtle: #726e63;
-  --border: #2a2b24;
-  --border-strong: #393a30;
+  --background: #000000;
+  --surface: #012a2e;
+  --surface-2: #06373b;
+  --ink: #fdfbf5;
+  --ink-muted: #9db3b3;
+  --ink-subtle: #6f8789;
+  --border: #123f43;
+  --border-strong: #1e565a;
 
-  --accent: #54c9a8;
-  --accent-hover: #66d4b5;
-  --accent-soft: #16332b;
-  --accent-contrast: #06120e;
-  --ring: #54c9a8;
+  --accent: #ffd100;
+  --accent-hover: #ffdc3d;
+  --accent-soft: #0a3438;
+  --accent-contrast: #012a2e;
+  --ring: #ffd100;
 
-  --viz-1: #54c9a8;
-  --viz-2: #d8a945;
-  --viz-3: #7a9ce6;
-  --viz-4: #d57a5c;
-  --viz-5: #9d8fd6;
-  --viz-baseline: #6f7060;
-  --viz-grid: #23241d;
+  --highlight: #ffd100;
+  --highlight-soft: #ffebae;
+  --highlight-contrast: #012a2e;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.55);
+  /* Same hue map as the light series so a policy area keeps its identity
+     across themes, lifted for the black canvas. */
+  --viz-1: #4ec9a4;
+  --viz-2: #ffd100;
+  --viz-3: #9dbcf2;
+  --viz-4: #abc278;
+  --viz-5: #7fcbd2;
+  --viz-baseline: #556d6f;
+  --viz-grid: #0c3a3e;
+
+  /* Deeper than the light theme: shadows have to separate a dark green card
+     from a black page, where a soft blur alone would disappear. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.65);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.75);
 }
 
 @theme inline {
@@ -84,6 +111,10 @@
   --color-accent-contrast: var(--accent-contrast);
   --color-ring: var(--ring);
 
+  --color-highlight: var(--highlight);
+  --color-highlight-soft: var(--highlight-soft);
+  --color-highlight-contrast: var(--highlight-contrast);
+
   --color-viz-1: var(--viz-1);
   --color-viz-2: var(--viz-2);
   --color-viz-3: var(--viz-3);
@@ -92,8 +123,8 @@
   --color-viz-baseline: var(--viz-baseline);
   --color-viz-grid: var(--viz-grid);
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-bespoke-serif), ui-serif, Georgia, serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   --radius-xs: 0.375rem;
@@ -124,7 +155,6 @@ body {
   background: var(--background);
   color: var(--ink);
   font-family: var(--font-sans);
-  font-feature-settings: "cv01", "cv03", "ss01";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -163,6 +193,15 @@ button:disabled,
 .tnum {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
+}
+
+/* The wordmark ships as one flat dark-green file, which would vanish against
+   the black dark-mode canvas. Painting it as a mask over the ink colour lets
+   that single asset serve both themes instead of needing a light variant. */
+.brand-logo {
+  background-color: var(--ink);
+  -webkit-mask: url("/brand/logo.svg") left center / contain no-repeat;
+  mask: url("/brand/logo.svg") left center / contain no-repeat;
 }
 
 @media (prefers-reduced-motion: reduce) {

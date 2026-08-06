@@ -47,6 +47,13 @@ export const metricDefSchema = z.object({
    * An exponent of 0 (or an omitted input) means the input has no effect.
    */
   drivers: z.record(z.string(), z.number()),
+  /**
+   * Inputs that shift this metric additively rather than proportionally, keyed
+   * by input id to a per-year coefficient. The contribution at time t is
+   * `coefficient * value * year(t)`, so a recurring annual amount accumulates.
+   * Used for annual cost, which eats into the federal budget gain.
+   */
+  offsets: z.record(z.string(), z.number()).optional(),
 });
 export type MetricDef = z.infer<typeof metricDefSchema>;
 
@@ -64,7 +71,10 @@ export const policyAreaSchema = z.object({
   /** metricId -> series aligned to dataset.timeAxis, evaluated at default inputs. */
   baselines: z.record(z.string(), z.array(z.number())),
   primaryMetricId: z.string(),
-  highlightMetricIds: z.array(z.string()),
+  /** Inputs shown in Basic mode; Advanced shows every input. */
+  basicInputIds: z.array(z.string()).min(1),
+  /** Metric tiles shown in Basic mode; Advanced shows every metric. */
+  basicMetricIds: z.array(z.string()).min(1),
 });
 export type PolicyArea = z.infer<typeof policyAreaSchema>;
 

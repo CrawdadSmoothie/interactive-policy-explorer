@@ -26,6 +26,9 @@ const OUT = resolve(ROOT, "src/data/policies.json");
 
 const TIME_AXIS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30];
 
+/** Index of year 10 -- the federal budget scoring window. */
+const TEN_YEAR_INDEX = TIME_AXIS.indexOf(10);
+
 const slug = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -84,7 +87,9 @@ const METRICS = [
   { id: "gdp", match: "gdp", label: "Change in GDP", shortLabel: "GDP", unit: "", format: "currency_m", direction: "up-good", drivers: { reach: 1, effectiveness: 1 } },
   { id: "medicaidSpending", match: "medicaid", label: "Change in Medicaid Spending", shortLabel: "Medicaid", unit: "", format: "currency_m", direction: "down-good", drivers: { reach: 1, effectiveness: 1.1 } },
   { id: "publicBenefitUse", match: "public benefit", label: "Change in Public Benefit Use", shortLabel: "Public benefits", unit: "", format: "currency_m", direction: "down-good", drivers: { reach: 0.9, effectiveness: 1 } },
-  { id: "federalDeficit", match: "federal deficit", label: "Change in Federal Deficit", shortLabel: "Federal deficit", unit: "", format: "currency_m", direction: "down-good", drivers: { reach: 1, effectiveness: 1 } },
+  // Sign convention: positive = the policy REDUCES the deficit (a budget gain).
+  // Annual cost accumulates against that gain and can drive it negative.
+  { id: "federalDeficit", match: "federal deficit", label: "Federal Budget Impact", shortLabel: "Budget impact", unit: "", format: "currency_m", direction: "up-good", drivers: { reach: 1, effectiveness: 1 }, offsets: { annualCost: -1 } },
 ] as const;
 
 function findParam(params: Map<string, number[]>, needle: string): number[] | null {
@@ -164,6 +169,23 @@ function buildArea(name: string, params: Map<string, number[]>): PolicyArea {
   const anchorReach = findParam(params, "reach")?.[0] ?? 100_000;
   const anchorEff = findParam(params, "effectiv")?.[0] ?? 0.3;
 
+  const shape = rampShape(meta.tau);
+
+  // Size the annual cost slider against the gross budget gain it works against,
+  // so the tradeoff is legible: the default consumes roughly half the gain over
+  // the 10-year scoring window, and the top of the range drives it negative.
+  const deficitSource = findParam(params, "federal deficit");
+  const deficitAnchor =
+    deficitSource?.[deficitSource.length - 1] ?? REFERENCE_ANCHORS.federalDeficit;
+  const grossGainAtYear10 = deficitAnchor * meta.scale * shape[TEN_YEAR_INDEX];
+  const annualizedGain = grossGainAtYear10 / 10;
+  // Both ends of this slider are read off the screen, so they get snapped to
+  // round figures. The derived numbers are only as precise as the anchors they
+  // come from, and "$32.67M" invites a precision the model cannot support.
+  const costMax = niceRound(annualizedGain * 2, 0.5);
+  const costDefault = niceRound(annualizedGain * 0.5, 1);
+  const costStep = niceStep(costMax);
+
   const inputs: PolicyArea["inputs"] = [
     {
       id: "reach",
@@ -177,9 +199,20 @@ function buildArea(name: string, params: Map<string, number[]>): PolicyArea {
       default: anchorReach,
     },
     {
+      id: "annualCost",
+      label: "Annual Cost",
+      description: "Federal cost per year, subtracted from the budget gain.",
+      unit: "per year",
+      format: "currency_m",
+      min: 0,
+      max: costMax,
+      step: costStep,
+      default: costDefault,
+    },
+    {
       id: "effectiveness",
       label: "Effectiveness",
-      description: "Estimated reduction in depression among those reached.",
+      description: "Estimated drop in depression among those reached.",
       unit: "decrease",
       format: "percent",
       min: 0,
@@ -188,8 +221,6 @@ function buildArea(name: string, params: Map<string, number[]>): PolicyArea {
       default: anchorEff,
     },
   ];
-
-  const shape = rampShape(meta.tau);
 
   const metrics: PolicyArea["metrics"] = [];
   const baselines: Record<string, number[]> = {};
@@ -210,6 +241,7 @@ function buildArea(name: string, params: Map<string, number[]>): PolicyArea {
       format: m.format,
       direction: m.direction,
       drivers: { ...m.drivers },
+      ...("offsets" in m ? { offsets: { ...m.offsets } } : {}),
     });
 
     baselines[m.id] = shape.map((s) => round(longRun * s, m.format));
@@ -223,8 +255,10 @@ function buildArea(name: string, params: Map<string, number[]>): PolicyArea {
     inputs,
     metrics,
     baselines,
-    primaryMetricId: "mhPrevalence",
-    highlightMetricIds: ["mhPrevalence", "gdp", "medicaidSpending", "laborSupply"],
+    // Budget impact leads: it is the framing federal policymakers score against.
+    primaryMetricId: "federalDeficit",
+    basicInputIds: ["reach", "annualCost"],
+    basicMetricIds: ["federalDeficit", "mhPrevalence", "gdp"],
   };
 }
 
@@ -239,6 +273,34 @@ const REFERENCE_ANCHORS: Record<string, number> = {
   publicBenefitUse: 0.9,
   federalDeficit: 200,
 };
+
+function roundTo(value: number, decimals: number): number {
+  const factor = Math.pow(10, decimals);
+  return Math.round(value * factor) / factor;
+}
+
+/**
+ * Snap to a round figure scaled to the value's own magnitude, so the result
+ * stays legible whether the number is single digits or hundreds. `fraction` is
+ * the increment as a share of that magnitude: 0.5 rounds 32.67 to the nearest
+ * 5 (35), while 1 rounds 8.17 to the nearest whole (8).
+ */
+function niceRound(value: number, fraction: number): number {
+  if (!(value > 0)) return 0;
+  const magnitude = Math.pow(10, Math.floor(Math.log10(value)));
+  const increment = magnitude * fraction;
+  return roundTo(Math.round(value / increment) * increment, 4);
+}
+
+/**
+ * Coarsest step that still gives the slider at least ~30 stops, taken from a
+ * ladder of round increments so every position lands on a clean figure rather
+ * than only the endpoints being tidy.
+ */
+function niceStep(max: number): number {
+  const ladder = [0.1, 0.5, 1, 2, 5, 10, 25, 50, 100];
+  return ladder.find((s) => s >= max / 100) ?? 100;
+}
 
 function round(value: number, format: string): number {
   if (format === "percent") return Math.round(value * 1000) / 1000;

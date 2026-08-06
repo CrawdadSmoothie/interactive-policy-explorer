@@ -1,18 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Fraunces, Geist_Mono } from "next/font/google";
+import { Montserrat, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+// The Kennedy Forum primary typeface — body copy and UI.
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
   display: "swap",
 });
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
+// TKF accent typeface — headlines, large statistics, select accents.
+const bespokeSerif = localFont({
+  src: "../fonts/BespokeSerif-Variable.woff2",
+  variable: "--font-bespoke-serif",
   display: "swap",
-  axes: ["opsz", "SOFT"],
+  weight: "300 800",
 });
 
 const geistMono = Geist_Mono({
@@ -29,8 +32,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f4f0" },
-    { media: "(prefers-color-scheme: dark)", color: "#0d0e0c" },
+    { media: "(prefers-color-scheme: light)", color: "#FDFBF5" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
   ],
 };
 
@@ -54,7 +57,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${fraunces.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${montserrat.variable} ${bespokeSerif.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

@@ -1,25 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { MoonIcon, SunIcon } from "./icons";
 import { cn } from "@/lib/utils";
 
 type Theme = "light" | "dark";
 
+/**
+ * The `dark` class on <html> is the source of truth -- an inline script in the
+ * layout sets it before paint. Subscribing to it directly keeps this button in
+ * sync without duplicating the theme into React state.
+ */
+function subscribe(onChange: () => void) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+  return () => observer.disconnect();
+}
+
 export function ThemeToggle({ className }: { className?: string }) {
   const reduce = useReducedMotion();
-  const [theme, setTheme] = useState<Theme>("light");
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    const stored = (localStorage.getItem("ipe-theme") as Theme | null) ?? "light";
-    setTheme(stored);
-    setMounted(true);
-  }, []);
+  const isDark = useSyncExternalStore(
+    subscribe,
+    () => document.documentElement.classList.contains("dark"),
+    () => false, // Server renders the light default.
+  );
 
   function setMode(next: Theme) {
-    setTheme(next);
     const root = document.documentElement;
     root.classList.toggle("dark", next === "dark");
     root.style.colorScheme = next;
@@ -27,8 +38,6 @@ export function ThemeToggle({ className }: { className?: string }) {
       localStorage.setItem("ipe-theme", next);
     } catch {}
   }
-
-  const isDark = mounted && theme === "dark";
 
   return (
     <button
